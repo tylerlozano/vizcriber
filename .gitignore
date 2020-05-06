@@ -14,3 +14,4 @@ __pycache__/
 app/static/*
 checkpoint
 ckpt*
+.pytest_cache/
