@@ -2,9 +2,9 @@ from __future__ import absolute_import
 
 from models import model_trainer
 
-frozen_epochs = 20
-unfrozen_encoder_epochs = 8
-unfrozen_embedder_epochs = 8
+frozen_epochs = 30
+unfrozen_encoder_epochs = 10
+unfrozen_embedder_epochs = 10
 total_epochs = (frozen_epochs + unfrozen_embedder_epochs +
                 unfrozen_encoder_epochs)
 

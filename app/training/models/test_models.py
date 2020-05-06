@@ -124,7 +124,7 @@ def word_embeddings(d_l):
 
 
 @pytest.mark.parametrize("batch_size", [1, 8])
-@pytest.mark.parametrize("units", [1, 64)
+@pytest.mark.parametrize("units", [1, 64])
 @pytest.mark.parametrize("num_pixels", [1, 100])
 def test_attention(batch_size, units, num_pixels):
     dec_state_shape = (units)
@@ -132,7 +132,7 @@ def test_attention(batch_size, units, num_pixels):
     test_attention = create_attention(dec_state_shape, embedder_shape, units)
     embedder_rand = tf.random.normal((batch_size, num_pixels, units))
     dec_rand = tf.random.normal((batch_size, units))
-    cvec, attw = test_attention.predict([dec_rand, embedder_rand])
+    cvec, attw = test_attention([dec_rand, embedder_rand])
     assert cvec.shape == attw.shape == (batch_size, num_pixels)
 
 
@@ -176,7 +176,7 @@ def test_embedder(batch_size, embed_dim):
 @pytest.mark.parametrize("batch_size", [4])
 @pytest.mark.parametrize("cvec_shape", [100])
 @pytest.mark.parametrize("vocab_size", ["default"])
-@pytest.mark.parametrize("units", [32, 64)
+@pytest.mark.parametrize("units", [32, 64])
 @pytest.mark.parametrize("with_embeddings", [True, False])
 def test_decoder(batch_size, d_l, cvec_shape, vocab_size, units, with_embeddings, word_embeddings):
     if vocab_size == "default":

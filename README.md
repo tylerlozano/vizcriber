@@ -48,7 +48,7 @@ or http://127.0.0.1:5001/api to see the the swagger docs for the api.
 
     Where candidates is the number of captions you want for one image, up to 10.
 
-To run tests open bash terminal in project dir and run pytest ./app/training/models/test_models.py
+To run tests open bash terminal in project dir and cd to app folder and run pytest training/models/test_models.py
 
 *Note:* Some tests take a long time, put @pytest.mark.skip on any test you want to skip.
 *Prereqs:* Some tests require you to have run the download_script.py in app/training first.

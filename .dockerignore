@@ -1,14 +1,9 @@
-__pycache__*
-env*
+__pycache__/
 env/
-.git*
 .git/
-.vscode*
+.vscode/
 .DS_Store
 test*
-images*
 images/
-*/*/*/images
-*/*/*/annotations
-annotations*
+annotations/
 glove*
