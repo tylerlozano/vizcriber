@@ -1,0 +1,16 @@
+static/*
+glove.42B*
+annotations/
+images/
+vizcriberenv/
+env/
+.vscode/
+model_checkpoints/*
+.DS_Store
+__pycache__/
+*.pyc
+./annotations
+./images
+.old*
+*.jpg
+app/static/*
