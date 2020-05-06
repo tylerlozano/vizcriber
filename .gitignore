@@ -1,7 +1,7 @@
 static/*
 glove.42B*
-annotations/
-images/
+annotations/*
+images/*
 vizcriberenv/
 env/
 .vscode/
@@ -11,6 +11,6 @@ __pycache__/
 *.pyc
 ./annotations
 ./images
-.old*
+*.old
 *.jpg
 app/static/*

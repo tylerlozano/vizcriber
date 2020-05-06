@@ -10,6 +10,7 @@ from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.optimizers import Adam
 
 from .data_loader import DataLoader
+from .evaluator import Evaluator
 from .models import (create_attention, create_decoder, create_embedder,
                      create_encoder)
 
@@ -95,7 +96,6 @@ class ModelTrainer():
         optimizer = Adam(learning_rate)
 
         if training:
-            from .evaluator import Evaluator
             self.decay = self._create_decay_scheduler(self._inverse_sigmoid,
                                                       expected_total_epochs)
             self.evaluator = Evaluator()
