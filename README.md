@@ -6,7 +6,7 @@ python ./app/training/train_script.py
 
 *warning* training take an incredibly long time depending on your resources
 feel free to modify the train script for number of desired training epochs,
-moodel parameters, vocab size, batch size, etc.
+model parameters, vocab size, batch size, etc.
 refer to model_trainer for available methods -- checkpoints after every epoch 
 will be uploaded to app/training/models/model_checkpoints/ folder.
 
