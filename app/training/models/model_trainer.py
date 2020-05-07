@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import random
@@ -13,6 +14,8 @@ from .data_loader import DataLoader
 from .evaluator import Evaluator
 from .models import (create_attention, create_decoder, create_embedder,
                      create_encoder)
+
+logger = logging.getLogger('__main__.training')
 
 
 class ModelTrainer():
@@ -99,7 +102,7 @@ class ModelTrainer():
             self.decay = self._create_decay_scheduler(self._inverse_sigmoid,
                                                       expected_total_epochs)
             self.evaluator = Evaluator()
-        
+
         self.ckpt = self._init_checkpoint(
             encoder, embedder, attention, decoder, optimizer, training)
         self.ckpt_path = f"{os.path.abspath('.')}/training/models/model_checkpoints"
@@ -115,6 +118,7 @@ class ModelTrainer():
         ----------
         target : string, optional (default None)
             Name of checkpoint to be loaded"""
+        logger.info(f"Loading model {target}")
         if target is not None:
             ckpt_path = f"{self.ckpt_path}/{target}"
         elif self.ckpt_manager.latest_checkpoint:
@@ -145,6 +149,7 @@ class ModelTrainer():
         val_batches_per_epoch = math.floor(
             self.data_loader.VAL_SIZE / self.data_loader.batch_size)
 
+        app.logger.info(f"Continuing training on epoch {start_epoch + 1}")
         for epoch in range(start_epoch + 1, (start_epoch + 1) + epochs):
             # start of epoch
             # start of training
@@ -156,14 +161,16 @@ class ModelTrainer():
                 tr_loss += _loss
 
                 if batch % 100 == 0:
-                    print(
+                    app.logger.info(
                         f"Epoch {epoch} Batch {batch} Loss {tr_loss / (batch + 1)}")
             # end of training
+            logger.info(f"Training finished for epoch {epoch}")
             tr_loss /= train_batches_per_epoch
             self.ckpt.train_loss.assign(tr_loss)
             tr_loss = 0
 
             # start of validation
+            logger.info(f"Validating model")
             self.evaluator.reset_scores()
             for (batch, (images, references)) in enumerate(val_batches):
                 hypotheses, _loss = self._evaluate_images(images, references)
@@ -173,12 +180,13 @@ class ModelTrainer():
                         self.data_loader.batch_convert_to_words(references),
                         self.data_loader.batch_convert_to_words(hypotheses,
                                                                 references=False))
-                # end of validation
                 except Exception as e:
-                    print(
-                        f'{repr(e)}| likely broken pipe in evaluator, reset.')
+                    logger.critical(
+                        f"{repr(e)}| likely broken pipe in evaluator, reset.")
+            # end of validation
+            logger.info(f"Validation finished for epoch {epoch}")
             va_loss /= val_batches_per_epoch
-            print(f"Validation Loss: {va_loss}")
+            logger.info(f"Validation Loss: {va_loss}")
             self.ckpt.validation_loss.assign(va_loss)
             va_loss = 0
 
@@ -187,16 +195,19 @@ class ModelTrainer():
 
             self.ckpt_manager.save()
 
-            print(self.ckpt.scores)
+            logger.info(f"Scores for epoch {epoch} are {self.ckpt.scores}")
 
     def unfreeze_embeddings(self):
         """Unfreezes embeddings in decoder model so they become trainable"""
+        logger.info(f"Unfreezing embeddings in decoder model")
         self.ckpt.decoder.layers[2].trainable = True
         self.ckpt_manager.save()
 
     def unfreeze_encoder(self, freeze_pt=86):
         """Unfreezes layers in encoder from freeze_pt to the last layer"""
         last_layer = len(self.ckpt.encoder.layers)
+        logger.info(
+            f"Unfreezing encoder from layer {freeze_pt} to {last_layer}")
         for i in range(freeze_pt, last_layer):
             self.ckpt.encoder.layers[i].trainable = True
         self.ckpt_manager.save()
@@ -310,7 +321,7 @@ class ModelTrainer():
                                    optimizer=optimizer)
         if training:
             scores = {k: tf.Variable(v, dtype='float32')
-            for k, v in self.evaluator.get_scores().items()}
+                      for k, v in self.evaluator.get_scores().items()}
         else:
             scores = {}
         ckpt.scores = scores

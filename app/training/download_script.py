@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
-from models.data_loader import DataLoader
-
 import glob
 import os
 import re
 import shutil
 
 import tensorflow as tf
+
+from models.data_loader import DataLoader
 
 _URIS = {
     'annotations': 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip',

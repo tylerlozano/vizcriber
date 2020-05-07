@@ -1,14 +1,16 @@
+import json
+import os
+
+import numpy as np
 import pytest
+import tensorflow as tf
 
 from .data_loader import DataLoader
 from .evaluator import Evaluator
 from .model_driver import beam_search
 from .model_trainer import ModelTrainer
 from .models import *
-import json
-import os
-import numpy as np
-import tensorflow as tf
+
 
 """
 data_loader

@@ -1,6 +1,7 @@
 
 import contextlib
 import json
+import logging
 import os
 import random
 from collections import OrderedDict
@@ -83,6 +84,8 @@ class DataLoader():
     IMAGES_PATH = f"{os.path.abspath('.')}/training/data/images"
     EMBEDDINGS_PATH = f"{os.path.abspath('.')}/training/data/glove.42B.300d.txt"
 
+    logger = logging.getLogger('__main__.data_loading')
+
     def __init__(self, batch_size=32, vocab_size=10240, shuffle_size=8000, training=True):
         """
         Parameters
@@ -107,7 +110,7 @@ class DataLoader():
             coco_files = [coco_train_file, coco_val_file]
 
             img_to_caps = OrderedDict()
-
+            logger.info("Processing json data")
             with contextlib.ExitStack() as stack:
                 files = [stack.enter_context(open(fname, 'r'))
                          for fname in coco_files]
@@ -117,6 +120,7 @@ class DataLoader():
             self.tokenizer = Tokenizer(num_words=self.vocab_size,
                                        oov_token="<unk>",
                                        filters='!"#$%&()*+,-./:;=?@[\\]^_`{|}~\t\n')
+            logger.info("Fitting tokenizer on corpus")
             self.tokenizer.fit_on_texts(tf.nest.flatten(img_to_caps.values()))
             self.tokenizer.index_word[0] = '<pad>'
             self.tokenizer.word_index['<pad>'] = 0
@@ -146,6 +150,7 @@ class DataLoader():
 
     def _create_word_list(self, path):
         # create word_list at indicated path
+        logger.info(f"Creating word_list.json at {WORDS_PATH}")
         data = []
         for i in range(self.vocab_size + 1):
             data.append(self.tokenizer.index_word[i])
@@ -190,6 +195,7 @@ class DataLoader():
         # combines each member from x_list and y_list into an (x, y)
         # tuple and splits the resulting list into train, validate, and test
         # sublists to be later converted into datasets
+        logger.info("Splitting data into train, val, and test datasets")
         train_split = int(self.TRAIN_P * self.DATASET_SIZE)
         val_split = int((self.TRAIN_P + self.VAL_P) * self.DATASET_SIZE)
 
@@ -224,7 +230,7 @@ class DataLoader():
         # preprocesses captions by tokenizing, cropping, padding, and removing
         # any caption list with more than 5 captions, prefering to remove
         # shorter captions
-
+        logger.info("Processing captions data")
         min_len, max_len = 10, 18
         end = self.tokenizer.word_index['<end>']
 
@@ -386,6 +392,8 @@ class DataLoader():
     def create_word_embedding_matrix(self):
         """creates glove embeddings of size WORD_EMBED_SIZE, must download 
         correct glove embedding file to resize to other dimensions"""
+
+        logger.info(f"Creating word_embedding_matrix from {EMBEDDINGS_PATH}")
         word_embed_dict = dict()
 
         with open(self.EMBEDDINGS_PATH, 'r') as file:
