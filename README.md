@@ -1,8 +1,3 @@
-## Try it out live!
-* go to : http://vizcriber.xyz:5001/
-* type : `curl -v -X GET -F "file=@<path/to/image>"  http://vizcriber.xyz:5001/api/caption`
-
-
 *Warning:* Before starting app it is recommended you only have the initial checkpoint
 file and the desired checkpoint number in model_checkpoints before building container.
 
