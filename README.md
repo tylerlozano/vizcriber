@@ -8,14 +8,14 @@ open a bash terminal in project directory and do following:
 `./start.sh`
 
 ### stop app
-open a bash terminal in project directory
-`docker ps`
-copy <pid> of container
-`docker stop <pid>`
+* open a bash terminal in project directory
+* `docker ps`
+* copy <pid> of container
+* `docker stop <pid>`
 
 
 ### Set-up virtualenv to train model
-   open a bash terminal in project directory
+   * open a bash terminal in project directory
    * `cd app`
    * `python3 -m venv env`
    * `source ./env/b*/a*`
