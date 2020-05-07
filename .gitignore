@@ -11,7 +11,7 @@ __pycache__/
 *.pyc
 *.old
 *.jpg
-app/static/*
+app/static/*.jpg
 checkpoint
 ckpt*
 .pytest_cache/
