@@ -51,5 +51,5 @@ or http://127.0.0.1:5001/api to see the the swagger docs for the api.
 ### To run unit tests
 `pytest training/models/test_models.py`
 
-*Note:* Some tests take a long time, put @pytest.mark.skip on any test you want to skip.
+*Note:* Some tests take a long time, put `@pytest.mark.skip` on any test you want to skip.
 *Prereqs:* Some tests require you to have run the download_script.py in app/training first.
