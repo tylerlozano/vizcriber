@@ -10,8 +10,8 @@ open a bash terminal in project directory and do following:
 ### stop app
 * open a bash terminal in project directory
 * `docker ps`
-* copy <pid> of container
-* `docker stop <pid>`
+* copy (pid) of container
+* `docker stop (pid)`
 
 
 ### Set-up virtualenv to train model
